@@ -25,8 +25,8 @@ CREATE TABLE IF NOT EXISTS reserva
 	id_reserva INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
     usuario VARCHAR(100) NOT NULL,
     fecha DATE NOT NULL,
-    horaInicio DATE NOT NULL,
-    horaFin DATE NOT NULL,
+    horaInicio TIME NOT NULL,
+    horaFin TIME NOT NULL,
     id_sale INT NOT NULL
 
 );

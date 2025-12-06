@@ -85,7 +85,7 @@
           <option value="">-- Seleccione una Sala --</option>
           <option th:each="sala : ${salas}"
                   th:value="${sala.id}"
-                  th:text="${sala.nombre + ' (' + sala.capacidad + ' personas)'}">
+                  th:text="${sala.nombres + ' (' + sala.capacidad + ' personas)'}">
             Sala de Ejemplo
           </option>
         </select>

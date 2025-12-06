@@ -13,7 +13,7 @@ public class Sala {
     private Integer id;
 
     @Column(name = "nombre")
-    private String nombre;
+    private String nombres;
 
     @Column(name = "capacidad")
     private int capacidad;
@@ -21,46 +21,4 @@ public class Sala {
     @Enumerated(EnumType.STRING)
     @Column(name = "estado")
     private Estado estado;
-
-    public Sala() {
-    }
-
-    public Sala(Integer id, String nombre, int capacidad, Estado estado) {
-        this.id = id;
-        this.nombre = nombre;
-        this.capacidad = capacidad;
-        this.estado = estado;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getNombres() {
-        return nombre;
-    }
-
-    public void setNombres(String nombre) {
-        this.nombre = nombre;
-    }
-
-    public int getCapacidad() {
-        return capacidad;
-    }
-
-    public void setCapacidad(int capacidad) {
-        this.capacidad = capacidad;
-    }
-
-    public Estado getEstado() {
-        return estado;
-    }
-
-    public void setEstado(Estado estado) {
-        this.estado = estado;
-    }
 }
