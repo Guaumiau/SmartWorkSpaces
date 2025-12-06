@@ -26,7 +26,7 @@ public class ReservaController {
     @GetMapping("")
     String show(Model model){
         model.addAttribute("reservas", reservaRepository.findAll());
-        return "reservas/list";
+        return "reservas/show";
     }
 
     @GetMapping("create")
@@ -35,7 +35,7 @@ public class ReservaController {
         List<Sala> salasDisponibles = salaRepository.findAll();
         model.addAttribute("salas",salasDisponibles);
 
-        return "reservas/form";
+        return "reservas/create";
     }
 
     @PostMapping("/save")

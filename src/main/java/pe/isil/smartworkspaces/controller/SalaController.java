@@ -5,7 +5,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import pe.isil.smartworkspaces.model.Estado;
-import pe.isil.smartworkspaces.model.Reserva;
 import pe.isil.smartworkspaces.model.Sala;
 import pe.isil.smartworkspaces.repository.SalaRepository;
 
@@ -23,14 +22,14 @@ public class SalaController {
     @GetMapping("")
     String show(Model model){
         model.addAttribute("salas", salaRepository.findAll());
-        return "salas/list";
+        return "salas/show";
     }
 
     @GetMapping("create")
     public String create(Model model){
         model.addAttribute("sala", new Sala());
         model.addAttribute("estados", Estado.values());
-        return "salas/form";
+        return "salas/create";
     }
 
     @PostMapping("/save")
