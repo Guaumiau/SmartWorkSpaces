@@ -23,14 +23,14 @@ public class SalaController {
     @GetMapping("")
     String show(Model model){
         model.addAttribute("salas", salaRepository.findAll());
-        return "salas/show";
+        return "salas/list";
     }
 
     @GetMapping("create")
     public String create(Model model){
         model.addAttribute("sala", new Sala());
         model.addAttribute("estados", Estado.values());
-        return "salas/create";
+        return "salas/form";
     }
 
     @PostMapping("/save")

@@ -26,7 +26,7 @@ public class ReservaController {
     @GetMapping("")
     String show(Model model){
         model.addAttribute("reservas", reservaRepository.findAll());
-        return "reservations/show";
+        return "reservas/list";
     }
 
     @GetMapping("create")
@@ -35,7 +35,7 @@ public class ReservaController {
         List<Sala> salasDisponibles = salaRepository.findAll();
         model.addAttribute("salas",salasDisponibles);
 
-        return "reservations/create";
+        return "reservas/form";
     }
 
     @PostMapping("/save")
@@ -55,7 +55,7 @@ public class ReservaController {
         Optional<Reserva> optionalReserva = reservaRepository.findById(id);
 
         if (optionalReserva.isEmpty()) {
-            return "redirect:/reservas/show";
+            return "redirect:/reservas/edit";
         }
 
         Reserva reserva = optionalReserva.get();
@@ -65,7 +65,7 @@ public class ReservaController {
 
         model.addAttribute("reserva", reserva);
 
-        return "reservations/edit";
+        return "reservas/edit";
     }
 
     @PostMapping("/update")
