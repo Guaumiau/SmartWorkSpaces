@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="layout :: contenido">
+
+<div class="d-flex justify-content-between mb-3">
+    <h2 class="fw-bold">Reservas</h2>
+    <a th:href="@{/reservas/create}" class="btn btn-success">Nueva Reserva</a>
+</div>
+
+<div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+
+<div class="card shadow">
+<div class="card-body">
+
+<table class="table table-striped table-hover text-center align-middle">
+    <thead class="table-dark">
+    <tr>
+        <th>ID</th>
+        <th>Usuario</th>
+        <th>Fecha</th>
+        <th>Inicio</th>
+        <th>Fin</th>
+        <th>Sala</th>
+        <th>Acciones</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    <tr th:each="r : ${reservas}">
+        <td th:text="${r.id}"></td>
+        <td th:text="${r.usuario}"></td>
+        <td th:text="${r.fecha}"></td>
+        <td th:text="${r.horaInicio}"></td>
+        <td th:text="${r.horaFin}"></td>
+        <td th:text="${r.sala.nombre}"></td>
+
+        <td>
+            <a th:href="@{'/reservas/edit/' + ${r.id}}" class="btn btn-warning btn-sm">Editar</a>
+            <a th:href="@{'/reservas/delete/' + ${r.id}}" class="btn btn-danger btn-sm"
+               onclick="return confirm('¿Eliminar reserva?')">Eliminar</a>
+        </td>
+    </tr>
+    </tbody>
+
+</table>
+
+</div>
+</div>
+
+</html>
