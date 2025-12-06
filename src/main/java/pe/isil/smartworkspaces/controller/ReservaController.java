@@ -77,7 +77,6 @@ public class ReservaController {
 
     @PostMapping("/delete/{id}")
     public String delete(@PathVariable Integer id){
-        sdasdsad
         reservaRepository.deleteById(id);
         return "redirect:/reservas";
     }
