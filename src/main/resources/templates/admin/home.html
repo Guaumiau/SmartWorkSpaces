@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{admin/template_admin}">
+
+<body>
+
+<div layout:fragment="contenido">
+    <div class="container text-center py-5">
+        <h1 class="fw-bold mb-3">Panel de Administración</h1>
+        <p class="lead mb-4">Gestión de Salas y Reservas</p>
+
+        <a th:href="@{/salas}" class="btn btn-primary btn-lg mx-2">
+            Gestionar Salas
+        </a>
+
+        <a th:href="@{/reservas}" class="btn btn-success btn-lg mx-2">
+            Gestionar Reservas
+        </a>
+    </div>
+</div>
+</body>
+
+</html>

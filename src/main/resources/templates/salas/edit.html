@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{admin/template_admin}">
+
+<body>
+
+<div layout:fragment="contenido">
+    <h2 class="fw-bold mb-4">Editar Sala</h2>
+
+    <div class="card shadow">
+        <div class="card-body">
+
+            <form th:action="@{/salas/save}" th:object="${sala}" method="post" class="row g-3">
+
+                <!-- ID oculto -->
+                <input type="hidden" th:field="*{id}">
+
+                <!-- NOMBRE -->
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Nombre</label>
+                    <input type="text" th:field="*{nombres}" class="form-control"
+                           placeholder="Ej: Sala de Reuniones A">
+                    <p class="text-danger small" th:errors="*{nombres}"></p>
+                </div>
+
+                <!-- CAPACIDAD -->
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Capacidad</label>
+                    <input type="number" th:field="*{capacidad}" min="1" class="form-control"
+                           placeholder="Ej: 10">
+                    <p class="text-danger small" th:errors="*{capacidad}"></p>
+                </div>
+
+                <!-- ESTADO -->
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Estado</label>
+                    <select th:field="*{estado}" class="form-select">
+                        <option value="">Seleccione estado...</option>
+                        <option th:each="est : ${estados}"
+                                th:value="${est}"
+                                th:text="${est}">
+                        </option>
+                    </select>
+                    <p class="text-danger small" th:errors="*{estado}"></p>
+                </div>
+
+                <!-- BOTONES -->
+                <div class="col-12 mt-3">
+                    <button class="btn btn-success px-4">Actualizar</button>
+                    <a th:href="@{/salas}" class="btn btn-secondary ms-1">Volver</a>
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+</div>
+</body>
+</html>

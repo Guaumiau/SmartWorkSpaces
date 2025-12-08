@@ -57,7 +57,7 @@ public class SalaController {
         return "redirect:/salas";
     }
 
-    @GetMapping("/delete/{id}")
+    @PostMapping("/delete/{id}")
     public String delete(@PathVariable Integer id){
         salaRepository.deleteById(id);
         return "redirect:/salas";

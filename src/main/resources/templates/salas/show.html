@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{admin/template_admin}">
+
+<body>
+
+<div layout:fragment="contenido">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fw-bold">Listado de Salas</h2>
+        <a th:href="@{/salas/create}" class="btn btn-primary px-4">Nueva Sala</a>
+    </div>
+
+    <!-- Error al eliminar (si sala tiene reservas) -->
+    <div th:if="${mensajeError}" class="alert alert-danger" th:text="${mensajeError}"></div>
+
+    <div class="card shadow">
+        <div class="card-body">
+
+            <!-- Cuando no existen salas -->
+            <div th:if="${#lists.isEmpty(salas)}" class="text-center py-4">
+                <p class="text-muted mb-2">No hay salas registradas todavía.</p>
+                <a th:href="@{/salas/create}" class="btn btn-primary">
+                    Crear primera sala
+                </a>
+            </div>
+
+            <!-- Tabla cuando existen salas -->
+            <table th:if="${!#lists.isEmpty(salas)}"
+                   class="table table-striped table-hover text-center align-middle">
+
+                <thead class="table-dark">
+                <tr>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>Capacidad</th>
+                    <th>Estado</th>
+                    <th>Acciones</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                <tr th:each="s : ${salas}">
+                    <td th:text="${s.id}"></td>
+                    <td th:text="${s.nombres}"></td>
+                    <td th:text="${s.capacidad}"></td>
+
+                    <td>
+                        <span class="badge px-3 py-2"
+                              th:classappend="${s.estado == 'ACTIVA'} ? 'bg-success' : 'bg-secondary'">
+                            <span th:text="${s.estado}"></span>
+                        </span>
+                    </td>
+
+                    <td>
+                        <a th:href="@{'/salas/edit/' + ${s.id}}"
+                            class="btn btn-warning btn-sm me-1">
+                            Editar
+                        </a>
+
+                        <form th:action="@{'/salas/delete/' + ${s.id}}" method="post" style="display:inline;">
+                            <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('¿Deseas eliminar esta sala?')">
+                                Eliminar
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+</div>
+</body>
+</html>
