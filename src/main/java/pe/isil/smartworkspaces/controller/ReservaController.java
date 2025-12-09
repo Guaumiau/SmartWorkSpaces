@@ -1,6 +1,9 @@
 package pe.isil.smartworkspaces.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -24,8 +27,19 @@ public class ReservaController {
     private SalaRepository salaRepository;
 
     @GetMapping("")
-    String show(Model model){
-        model.addAttribute("reservas", reservaRepository.findAll());
+    String show(Model model,
+                @PageableDefault(size = 5, sort = "usuario") Pageable pageable,
+                @RequestParam(required = false) String usuario) {
+        
+        Page<Reserva> reservas;
+
+        if (usuario != null && !usuario.trim().isEmpty()) {
+            reservas = reservaRepository.findByUsuarioContaining(usuario, pageable);
+        } else {
+            reservas = reservaRepository.findAll(pageable);
+        }
+
+        model.addAttribute("reservas", reservas);
         return "reservas/show";
     }
 

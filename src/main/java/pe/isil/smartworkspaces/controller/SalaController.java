@@ -1,6 +1,9 @@
 package pe.isil.smartworkspaces.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -20,8 +23,19 @@ public class SalaController {
     private SalaRepository salaRepository;
 
     @GetMapping("")
-    String show(Model model){
-        model.addAttribute("salas", salaRepository.findAll());
+    String show(Model model,
+                @PageableDefault(size = 5, sort = "nombres") Pageable pageable,
+                @RequestParam(required = false) String nombres) {
+        
+        Page<Sala> salas;
+
+        if (nombres != null && !nombres.trim().isEmpty()) {
+            salas = salaRepository.findByNombresContaining(nombres, pageable);
+        } else {
+            salas = salaRepository.findAll(pageable);
+        }
+
+        model.addAttribute("salas", salas);
         return "salas/show";
     }
 
