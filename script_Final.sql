@@ -1,5 +1,7 @@
 CREATE DATABASE IF NOT EXISTS SmartWorkSpaces;
 
+
+
 USE smartworkspaces;
 
 CREATE TABLE IF NOT EXISTS sala
@@ -18,7 +20,7 @@ CHECK (capacidad > 0);
 
 ALTER TABLE  sala
 ADD CONSTRAINT restric_estado
-CHECK (estado IN("ACTIVA" , "INACTIVA"));
+CHECK (estado IN("ACTIVO" , "INACTIVO"));
 
 CREATE TABLE IF NOT EXISTS reserva
 (
@@ -35,3 +37,6 @@ CREATE TABLE IF NOT EXISTS reserva
 ALTER TABLE reserva
 ADD CONSTRAINT FK_sala
 FOREIGN KEY(id_sale) REFERENCES sala(id_sale);
+
+
+
