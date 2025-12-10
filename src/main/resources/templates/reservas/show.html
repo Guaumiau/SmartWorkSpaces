@@ -4,103 +4,128 @@
 
 <body>
 
-    <div layout:fragment="contenido">
+<div layout:fragment="contenido">
 
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <h2 class="fw-bold">Listado de Reservas</h2>
-            <a th:href="@{/reservas/create}" class="btn btn-success px-4">
-                Nueva Reserva
-            </a>
-        </div>
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fw-bold">Listado de Reservas</h2>
+        <a th:href="@{/reservas/create}" class="btn btn-success px-4">
+            <i class="bi bi-plus-lg"></i> Nueva Reserva
+        </a>
+    </div>
 
-        <!-- Errores generales (ej: no se puede eliminar por restricciones) -->
-        <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+    <!-- ========================================== -->
+    <!-- BLOQUE DE MENSAJES (Integrado con Controller) -->
+    <!-- ========================================== -->
 
-        <div class="card shadow">
-            <div class="card-body">
+    <!-- Mensaje de Éxito -->
+    <div th:if="${msgExito}" class="alert alert-success alert-dismissible fade show" role="alert">
+        <i class="bi bi-check-circle-fill"></i> <span th:text="${msgExito}"></span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
 
-                <!-- Search Form -->
-                <form action="" class="my-3">
-                    <div class="row">
-                        <div class="col-md-6 col-lg-4">
-                            <div class="input-group">
-                                <input type="search" name="usuario" class="form-control"
-                                    placeholder="Buscar reserva por usuario" th:value="${param.usuario}">
-                                <button class="btn btn-primary">
-                                    Buscar
-                                </button>
-                            </div>
+    <!-- Mensaje de Error (Desde RedirectAttributes) -->
+    <div th:if="${msgError}" class="alert alert-danger alert-dismissible fade show" role="alert">
+        <i class="bi bi-exclamation-triangle-fill"></i> <span th:text="${msgError}"></span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+
+    <!-- Errores generales simples (si usas 'error' en el modelo) -->
+    <div th:if="${error}" class="alert alert-danger alert-dismissible fade show" role="alert">
+        <span th:text="${error}"></span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    <!-- ========================================== -->
+
+    <div class="card shadow">
+        <div class="card-body">
+
+            <!-- Formulario de Búsqueda -->
+            <form th:action="@{/reservas}" method="get" class="my-3">
+                <div class="row">
+                    <div class="col-md-6 col-lg-4">
+                        <div class="input-group">
+                            <input type="search" name="usuario" class="form-control"
+                                   placeholder="Buscar reserva por usuario" th:value="${param.usuario}">
+                            <button class="btn btn-primary" type="submit">
+                                <i class="bi bi-search"></i> Buscar
+                            </button>
                         </div>
                     </div>
-                </form>
-
-                <div th:if="${reservas.totalElements == 0}" class="text-center py-4">
-                    <p class="text-muted mb-2">No hay reservas registradas todavía.</p>
-                    <a th:href="@{/reservas/create}" class="btn btn-primary">
-                        Crear primera reserva
-                    </a>
                 </div>
+            </form>
 
-                <table th:if="${reservas.totalElements > 0}"
-                    class="table table-striped table-hover align-middle text-center">
+            <!-- Estado Vacío -->
+            <div th:if="${reservas.totalElements == 0}" class="text-center py-4">
+                <p class="text-muted mb-2">No hay reservas registradas todavía.</p>
+                <a th:href="@{/reservas/create}" class="btn btn-primary">
+                    Crear primera reserva
+                </a>
+            </div>
 
-                    <thead class="table-dark">
-                        <tr>
-                            <th>ID</th>
-                            <th>Usuario</th>
-                            <th>Fecha</th>
-                            <th>Inicio</th>
-                            <th>Fin</th>
-                            <th>Sala</th>
-                            <th>Acciones</th>
-                        </tr>
-                    </thead>
+            <!-- Tabla de Resultados -->
+            <table th:if="${reservas.totalElements > 0}"
+                   class="table table-striped table-hover align-middle text-center">
 
-                    <tbody>
-                        <tr th:each="r : ${reservas}">
-                            <td th:text="${r.id}"></td>
-                            <td th:text="${r.usuario}"></td>
-                            <td th:text="${r.fecha}"></td>
-                            <td th:text="${r.horaInicio}"></td>
-                            <td th:text="${r.horaFin}"></td>
-                            <td th:text="${r.sala.nombres}"></td>
+                <thead class="table-dark">
+                <tr>
+                    <th>ID</th>
+                    <th>Usuario</th>
+                    <th>Fecha</th>
+                    <th>Inicio</th>
+                    <th>Fin</th>
+                    <th>Sala</th>
+                    <th>Acciones</th>
+                </tr>
+                </thead>
 
-                            <td>
-                                <a th:href="@{'/reservas/edit/' + ${r.id}}" class="btn btn-warning btn-sm me-1">
-                                    Editar
-                                </a>
+                <tbody>
+                <tr th:each="r : ${reservas}">
+                    <td th:text="${r.id}"></td>
+                    <td th:text="${r.usuario}"></td>
+                    <!-- Formateo de fecha opcional: th:text="${#temporals.format(r.fecha, 'dd/MM/yyyy')}" -->
+                    <td th:text="${r.fecha}"></td>
+                    <td th:text="${r.horaInicio}"></td>
+                    <td th:text="${r.horaFin}"></td>
+                    <!-- Uso de ?. para evitar error si sala es null -->
+                    <td th:text="${r.sala?.nombres} ?: 'Sin Sala'"></td>
 
-                                <form th:action="@{'/reservas/delete/' + ${r.id}}" method="post"
-                                    style="display:inline;">
-                                    <button type="submit" class="btn btn-danger btn-sm"
-                                        onclick="return confirm('¿Deseas eliminar esta reserva?')">
-                                        Eliminar
-                                    </button>
-                                </form>
-                            </td>
-                        </tr>
-                    </tbody>
+                    <td>
+                        <!-- Botón EDITAR (Con Texto e Ícono) -->
+                        <a th:href="@{'/reservas/edit/' + ${r.id}}" class="btn btn-warning btn-sm me-1" title="Editar">
+                            <i class="bi bi-pencil"></i> Editar
+                        </a>
 
-                </table>
+                        <!-- Botón ELIMINAR (Con Texto e Ícono) -->
+                        <form th:action="@{'/reservas/delete/' + ${r.id}}" method="post" style="display:inline;">
+                            <button type="submit" class="btn btn-danger btn-sm" title="Eliminar"
+                                    onclick="return confirm('¿Deseas eliminar esta reserva?')">
+                                <i class="bi bi-trash"></i> Eliminar
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+                </tbody>
 
-                <!-- Pagination -->
-                <div class="row">
-                    <div class="col-sm-6">
-                        <div sd:pagination-summary="">info</div>
-                    </div>
-                    <div class="col-sm-6">
-                        <nav class="pull-right">
-                            <ul class="pagination" sd:pagination-split="7" sd:pagination="full">
-                                <li class="disabled"><a href="#" aria-label="Previous"><span
-                                            aria-hidden="true">&laquo;</span></a></li>
-                                <li class="active"><a href="#">1 <span class="sr-only">(current)</span></a></li>
-                            </ul>
-                        </nav>
-                    </div>
+            </table>
+
+            <!-- Paginación (Requiere dialecto Spring Data) -->
+            <div class="row mt-3" th:if="${reservas.totalElements > 0}">
+                <div class="col-sm-6 text-muted">
+                    <div sd:pagination-summary="">info</div>
+                </div>
+                <div class="col-sm-6">
+                    <nav class="float-end">
+                        <ul class="pagination" sd:pagination-split="7" sd:pagination="full">
+                            <!-- Elementos de paginación generados por sd:pagination -->
+                            <li class="disabled"><a href="#" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a></li>
+                            <li class="active"><a href="#">1 <span class="sr-only">(current)</span></a></li>
+                        </ul>
+                    </nav>
                 </div>
             </div>
         </div>
     </div>
+</div>
 
 </body>
 
