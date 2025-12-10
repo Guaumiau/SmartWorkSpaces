@@ -61,6 +61,7 @@ public class ReservaController {
     @PostMapping("/save")
     public String save(@Validated Reserva reserva,
                        BindingResult bindingResult,
+                       @RequestParam(name = "sala", required = false) Integer idSala,
                        Model model) {
 
         if (reserva.getFecha() != null && reserva.getHoraInicio() != null &&
@@ -74,9 +75,11 @@ public class ReservaController {
 
             bindingResult.rejectValue("horaFin", "HoraInvalida");
         }
-        Sala salaSeleccionada=salaRepository.findById(reserva.getSala());
-        if (salaSeleccionada.getEstado() == Estado.INACTIVA) {
-            bindingResult.rejectValue("sala", "SalaInactiva");
+        if (idSala != null) {
+            Sala salaSeleccionada = salaRepository.findById(idSala).orElse(null);
+            if (salaSeleccionada != null && salaSeleccionada.getEstado() == Estado.INACTIVA) {
+                bindingResult.rejectValue("sala", "SalaInactiva");
+            }
         }
 
         // Si hay errores, regresar al formulario
@@ -109,8 +112,9 @@ public class ReservaController {
     }
 
     @PostMapping("/update")
-    public String update(@Validated Reserva reserva, BindingResult bindingResult, Model model){
-
+    public String update(@Validated Reserva reserva, BindingResult bindingResult,
+                         @RequestParam(name = "sala", required = false) Integer idSala,
+                         Model model){
 
         if (reserva.getFecha() != null && reserva.getHoraInicio() != null &&
                 reserva.getFecha().isEqual(LocalDate.now()) &&
@@ -122,6 +126,12 @@ public class ReservaController {
                 !reserva.getHoraFin().isAfter(reserva.getHoraInicio())) {
 
             bindingResult.rejectValue("horaFin", "HoraInvalida");
+        }
+        if (idSala != null) {
+            Sala salaSeleccionada = salaRepository.findById(idSala).orElse(null);
+            if (salaSeleccionada != null && salaSeleccionada.getEstado() == Estado.INACTIVA) {
+                bindingResult.rejectValue("sala", "SalaInactiva");
+            }
         }
 
         if(bindingResult.hasErrors()){

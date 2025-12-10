@@ -50,8 +50,11 @@ public class SalaController {
     }
 
     @PostMapping("/save")
-    public String save(Model model, @Validated  Sala sala, BindingResult bindingResult) throws IOException {
-
+    public String save(Model model, @Validated Sala sala, BindingResult bindingResult) throws IOException {
+        Sala salaExistente = salaRepository.findByNombresIgnoreCase(sala.getNombres());
+        if (salaExistente != null || !sala.getId().equals(salaExistente.getId())) {
+            bindingResult.rejectValue("nombres", "NombreDuplicado");
+        }
 
         if (bindingResult.hasErrors()) {
             model.addAttribute("sala", sala);
@@ -78,7 +81,10 @@ public class SalaController {
 
     @PostMapping("/update")
     public String update(@Validated Sala sala, BindingResult bindingResult, Model model) throws IOException {
-
+        Sala salaExistente = salaRepository.findByNombresIgnoreCase(sala.getNombres());
+        if (salaExistente != null || !sala.getId().equals(salaExistente.getId())) {
+            bindingResult.rejectValue("nombres", "NombreDuplicado");
+        }
 
         if (bindingResult.hasErrors()) {
             model.addAttribute("sala", sala);

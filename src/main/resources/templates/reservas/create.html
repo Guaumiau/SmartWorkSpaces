@@ -48,7 +48,7 @@
                 <!-- SALA -->
                 <div class="col-md-6">
                     <label class="form-label fw-semibold">Sala</label>
-                    <select th:field="*{sala}" th:errorclass="is-invalid" class="form-select" >
+                    <select name="sala" th:field="*{sala}" th:errorclass="is-invalid" class="form-select" >
                         <option value="">Seleccione una sala...</option>
 
                         <option th:each="s : ${salas}"
