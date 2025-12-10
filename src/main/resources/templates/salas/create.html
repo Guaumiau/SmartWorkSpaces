@@ -16,30 +16,42 @@
                 <!-- NOMBRE -->
                 <div class="col-md-6">
                     <label class="form-label fw-semibold">Nombre</label>
-                    <input type="text" th:field="*{nombres}" class="form-control"
-                           placeholder="Ej: Sala de Reuniones A">
-                    <p class="text-danger small" th:errors="*{nombres}"></p>
+                    <input type="text"
+                           th:field="*{nombres}"
+                           th:errorclass="is-invalid"
+                           class="form-control"
+                           placeholder="Ej: Sala de Reuniones A"
+                           >
+                    <div class="invalid-feedback" th:if="${#fields.hasErrors('nombres')}" th:errors="*{nombres}"></div>
                 </div>
 
                 <!-- CAPACIDAD -->
+                <!-- CAPACIDAD -->
                 <div class="col-md-6">
                     <label class="form-label fw-semibold">Capacidad</label>
-                    <input type="number" th:field="*{capacidad}" min="1" class="form-control"
-                           placeholder="Ej: 10">
-                    <p class="text-danger small" th:errors="*{capacidad}"></p>
+                    <input type="number"
+                           th:field="*{capacidad}"
+                           th:errorclass="is-invalid"
+                           min="1"
+                           class="form-control"
+                           placeholder="Ej: 10"
+                           >
+                    <div class="invalid-feedback" th:if="${#fields.hasErrors('capacidad')}" th:errors="*{capacidad}"></div>
                 </div>
 
                 <!-- ESTADO -->
                 <div class="col-md-6">
                     <label class="form-label fw-semibold">Estado</label>
-                    <select th:field="*{estado}" class="form-select">
+                    <select th:field="*{estado}"
+                            th:errorclass="is-invalid"
+                            class="form-select">
                         <option value="">Seleccione estado...</option>
                         <option th:each="est : ${estados}"
                                 th:value="${est}"
                                 th:text="${est}">
                         </option>
                     </select>
-                    <p class="text-danger small" th:errors="*{estado}"></p>
+                    <div class="invalid-feedback" th:if="${#fields.hasErrors('estado')}" th:errors="*{estado}"></div>
                 </div>
 
                 <!-- BOTONES -->

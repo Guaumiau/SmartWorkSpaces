@@ -6,6 +6,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import java.time.LocalDate;
+import org.springframework.validation.BindingResult;
+import pe.isil.smartworkspaces.model.Estado;
+import org.springframework.validation.Errors;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import pe.isil.smartworkspaces.model.Reserva;
 import pe.isil.smartworkspaces.model.Sala;
@@ -13,6 +18,7 @@ import pe.isil.smartworkspaces.repository.ReservaRepository;
 import pe.isil.smartworkspaces.repository.SalaRepository;
 
 import java.io.IOException;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -53,11 +59,33 @@ public class ReservaController {
     }
 
     @PostMapping("/save")
-    public String save(Reserva reserva, @RequestParam("sala") Integer idSala) {
-        Sala salaSeleccionada = new Sala();
-        salaSeleccionada.setId(idSala);
+    public String save(@Validated Reserva reserva,
+                       BindingResult bindingResult,
+                       Model model) {
 
-        reserva.setSala(salaSeleccionada);
+        if (reserva.getFecha() != null && reserva.getHoraInicio() != null &&
+                reserva.getFecha().isEqual(LocalDate.now()) &&
+                reserva.getHoraInicio().isBefore(LocalTime.now())) {
+
+            bindingResult.rejectValue("horaInicio", "HoraInvalida");
+        }
+        if (reserva.getHoraInicio() != null && reserva.getHoraFin() != null &&
+                !reserva.getHoraFin().isAfter(reserva.getHoraInicio())) {
+
+            bindingResult.rejectValue("horaFin", "HoraInvalida");
+        }
+        Sala salaSeleccionada=salaRepository.findById(reserva.getSala());
+        if (salaSeleccionada.getEstado() == Estado.INACTIVA) {
+            bindingResult.rejectValue("sala", "SalaInactiva");
+        }
+
+        // Si hay errores, regresar al formulario
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("reserva", reserva);
+            model.addAttribute("salas", salaRepository.findAll());
+
+            return "reservas/create";
+        }
 
         reservaRepository.save(reserva);
         return "redirect:/reservas";
@@ -65,9 +93,7 @@ public class ReservaController {
 
     @GetMapping("/edit/{id}")
     public String edit(@PathVariable Integer id, Model model){
-
         Optional<Reserva> optionalReserva = reservaRepository.findById(id);
-
         if (optionalReserva.isEmpty()) {
             return "redirect:/reservas/edit";
         }
@@ -83,7 +109,26 @@ public class ReservaController {
     }
 
     @PostMapping("/update")
-    public String update(Reserva reserva) throws IOException {
+    public String update(@Validated Reserva reserva, BindingResult bindingResult, Model model){
+
+
+        if (reserva.getFecha() != null && reserva.getHoraInicio() != null &&
+                reserva.getFecha().isEqual(LocalDate.now()) &&
+                reserva.getHoraInicio().isBefore(LocalTime.now())) {
+
+            bindingResult.rejectValue("horaInicio", "HoraInvalida");
+        }
+        if (reserva.getHoraInicio() != null && reserva.getHoraFin() != null &&
+                !reserva.getHoraFin().isAfter(reserva.getHoraInicio())) {
+
+            bindingResult.rejectValue("horaFin", "HoraInvalida");
+        }
+
+        if(bindingResult.hasErrors()){
+            model.addAttribute("salas", salaRepository.findAll());
+            return "reservas/edit";
+        }
+
 
         reservaRepository.save(reserva);
         return "redirect:/reservas";

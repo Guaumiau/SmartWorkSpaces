@@ -19,39 +19,36 @@
                 <!-- USUARIO -->
                 <div class="col-md-6">
                     <label class="form-label fw-semibold">Usuario</label>
-                    <input type="text" th:field="*{usuario}" class="form-control" placeholder="Ej: Carlos Pérez">
-                    <p class="text-danger small" th:errors="*{usuario}"></p>
+                    <input type="text" th:field="*{usuario}" th:errorclass="is-invalid" class="form-control" placeholder="Ej: Carlos Pérez" >
+                    <div class="invalid-feedback" th:if="${#fields.hasErrors('usuario')}" th:errors="*{usuario}"></div>
                 </div>
 
                 <!-- FECHA -->
                 <div class="col-md-6">
                     <label class="form-label fw-semibold">Fecha</label>
-                    <input type="date" id="fecha" th:field="*{fecha}" class="form-control">
-                    <p class="text-danger small" th:errors="*{fecha}"></p>
+                    <input type="date" id="fecha" th:field="*{fecha}" th:errorclass="is-invalid" class="form-control" >
+                    <div class="invalid-feedback" th:if="${#fields.hasErrors('fecha')}" th:errors="*{fecha}"></div>
                 </div>
 
                 <!-- HORA INICIO -->
                 <div class="col-md-6">
                     <label class="form-label fw-semibold">Hora Inicio</label>
-                    <input type="time" id="horaInicio" th:field="*{horaInicio}" class="form-control">
-                    <p class="text-danger small" th:errors="*{horaInicio}"></p>
+                    <input type="time" id="horaInicio" th:errorclass="is-invalid" th:field="*{horaInicio}" class="form-control" >
+                    <div class="invalid-feedback" th:if="${#fields.hasErrors('horaInicio')}" th:errors="*{horaInicio}"></div>
                 </div>
 
                 <!-- HORA FIN -->
                 <div class="col-md-6">
                     <label class="form-label fw-semibold">Hora Fin</label>
-                    <input type="time" id="horaFin" th:field="*{horaFin}" class="form-control">
-                    <p class="text-danger small" th:errors="*{horaFin}"></p>
+                    <input type="time" id="horaFin" th:errorclass="is-invalid" th:field="*{horaFin}" class="form-control" >
+                    <div class="invalid-feedback"  th:if="${#fields.hasErrors('horaFin')}" th:errors="*{horaFin}"></div>
 
-                    <small id="horaErrorMsg" class="text-danger d-none">
-                        La hora fin debe ser mayor a la hora inicio.
-                    </small>
                 </div>
 
                 <!-- SALA -->
                 <div class="col-md-6">
                     <label class="form-label fw-semibold">Sala</label>
-                    <select th:field="*{sala}" class="form-select">
+                    <select th:field="*{sala}" th:errorclass="is-invalid" class="form-select" >
                         <option value="">Seleccione una sala...</option>
 
                         <option th:each="s : ${salas}"

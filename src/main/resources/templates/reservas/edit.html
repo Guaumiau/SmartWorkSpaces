@@ -15,7 +15,7 @@
     <div class="card shadow">
         <div class="card-body">
 
-            <form th:action="@{/reservas/save}" th:object="${reserva}" method="post" class="row g-3">
+            <form th:action="@{/reservas/update}" th:object="${reserva}" method="post" class="row g-3">
 
                 <!-- ID oculto -->
                 <input type="hidden" th:field="*{id}">
@@ -23,47 +23,49 @@
                 <!-- USUARIO -->
                 <div class="col-md-6">
                     <label class="form-label fw-semibold">Usuario</label>
-                    <input type="text" th:field="*{usuario}" class="form-control" placeholder="Nombre del usuario">
-                    <p class="text-danger small" th:errors="*{usuario}"></p>
+                    <input type="text" th:field="*{usuario}" th:errorclass="is-invalid" class="form-control" placeholder="Nombre del usuario">
+                    <div class="invalid-feedback" th:if="${#fields.hasErrors('usuario')}" th:errors="*{usuario}"></div>
                 </div>
 
                 <!-- FECHA -->
                 <div class="col-md-6">
                     <label class="form-label fw-semibold">Fecha</label>
-                    <input type="date" id="fecha" th:field="*{fecha}" class="form-control">
-                    <p class="text-danger small" th:errors="*{fecha}"></p>
+                    <input type="date" id="fecha" th:field="*{fecha}" th:errorclass="is-invalid" class="form-control">
+                    <div class="invalid-feedback" th:if="${#fields.hasErrors('fecha')}" th:errors="*{fecha}"></div>
                 </div>
 
                 <!-- HORA INICIO -->
                 <div class="col-md-6">
                     <label class="form-label fw-semibold">Hora Inicio</label>
-                    <input type="time" id="horaInicio" th:field="*{horaInicio}" class="form-control">
-                    <p class="text-danger small" th:errors="*{horaInicio}"></p>
+                    <input type="time" id="horaInicio" th:field="*{horaInicio}" th:errorclass="is-invalid" class="form-control">
+                    <div class="invalid-feedback" th:if="${#fields.hasErrors('horaInicio')}" th:errors="*{horaInicio}"></div>
                 </div>
 
                 <!-- HORA FIN -->
                 <div class="col-md-6">
                     <label class="form-label fw-semibold">Hora Fin</label>
-                    <input type="time" id="horaFin" th:field="*{horaFin}" class="form-control">
-                    <p class="text-danger small" th:errors="*{horaFin}"></p>
+                    <input type="time" id="horaFin" th:field="*{horaFin}" th:errorclass="is-invalid" class="form-control">
+                    <div class="invalid-feedback" th:if="${#fields.hasErrors('horaFin')}" th:errors="*{horaFin}"></div>
 
-                    <small id="horaErrorMsg" class="text-danger d-none">
-                        La hora fin debe ser mayor que la hora inicio.
-                    </small>
+
                 </div>
 
                 <!-- SALA -->
                 <div class="col-md-6">
                     <label class="form-label fw-semibold">Sala</label>
-                    <select th:field="*{sala}" class="form-select">
+                    <select name="sala" class="form-select"
+                            th:classappend="${#fields.hasErrors('sala')} ? 'is-invalid' : ''">
                         <option value="">Seleccione una sala...</option>
 
                         <option th:each="s : ${salas}"
                                 th:value="${s.id}"
-                                th:text="${s.nombres}">
+                                th:text="${s.nombres}"
+                                th:selected="${reserva.sala != null and s.id == reserva.sala.id}">
+                        >
+
                         </option>
                     </select>
-                    <p class="text-danger small" th:errors="*{sala}"></p>
+                    <div class="invalid-feedback" th:if="${#fields.hasErrors('sala')}" th:errors="*{sala}"></div>
                 </div>
 
                 <!-- BOTONES -->

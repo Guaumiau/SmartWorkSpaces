@@ -8,5 +8,7 @@ import pe.isil.smartworkspaces.model.Sala;
 
 @Repository
 public interface SalaRepository extends JpaRepository<Sala, Integer> {
+    boolean existsByNombresIgnoreCase(String nombres);
+    Sala findByNombresIgnoreCase(String nombres);
     Page<Sala> findByNombresContaining(String nombres, Pageable pageable);
 }
