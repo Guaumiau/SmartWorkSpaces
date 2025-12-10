@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS sala
 	id_sale INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
     nombre VARCHAR(100) NOT NULL UNIQUE,
     capacidad INT NOT NULL,
-	estado ENUM('ACTIVO', 'INACTIVO') NOT NULL
+	estado ENUM('ACTIVA', 'INACTIVA') NOT NULL
 );
 
 
@@ -20,7 +20,7 @@ CHECK (capacidad > 0);
 
 ALTER TABLE  sala
 ADD CONSTRAINT restric_estado
-CHECK (estado IN("ACTIVO" , "INACTIVO"));
+CHECK (estado IN("ACTIVA" , "INACTIVA"));
 
 CREATE TABLE IF NOT EXISTS reserva
 (
