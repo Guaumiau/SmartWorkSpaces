@@ -25,9 +25,7 @@ public class SalaController {
     @Autowired
     private SalaRepository salaRepository;
 
-    // ----------------------------------------------------------------------
-    // 1. LISTAR Y BUSCAR (Index)
-    // ----------------------------------------------------------------------
+    // 1. LISTAR Y BUSCAR
     @GetMapping("")
     String show(Model model,
                 @PageableDefault(size = 5, sort = "nombres") Pageable pageable,
@@ -47,9 +45,7 @@ public class SalaController {
         return "salas/show";
     }
 
-    // ----------------------------------------------------------------------
-    // 2. CREAR (Formulario)
-    // ----------------------------------------------------------------------
+    // 2. CREAR
     @GetMapping("create")
     public String create(Model model){
         model.addAttribute("sala", new Sala());
@@ -57,19 +53,15 @@ public class SalaController {
         return "salas/create";
     }
 
-    // ----------------------------------------------------------------------
-    // 3. GUARDAR (Persistencia Create)
-    // ----------------------------------------------------------------------
+    // 3. GUARDAR
     @PostMapping("/save")
     public String save(Model model, @Validated Sala sala, BindingResult bindingResult, RedirectAttributes ra) throws IOException {
 
         // A. Validación de Duplicados (Nombre único)
-        // Corregido: Primero verificamos si salaExistente NO es null
         Sala salaExistente = salaRepository.findByNombresIgnoreCase(sala.getNombres());
 
         if (salaExistente != null) {
-            // Si existe, y estamos creando (o el ID es diferente), es duplicado
-            bindingResult.rejectValue("nombres", "NombreDuplicado", "Ya existe una sala con ese nombre.");
+            bindingResult.rejectValue("nombres", "NombreDuplicado");
         }
 
         // B. Manejo de Errores de Validación
@@ -86,9 +78,7 @@ public class SalaController {
         return "redirect:/salas";
     }
 
-    // ----------------------------------------------------------------------
-    // 4. EDITAR (Cargar Formulario)
-    // ----------------------------------------------------------------------
+    // 4. EDITAR
     @GetMapping("/edit/{id}")
     public String edit(@PathVariable Integer id, Model model, RedirectAttributes ra){
         Optional<Sala> optionalSala = salaRepository.findById(id);
@@ -105,21 +95,16 @@ public class SalaController {
         return "salas/edit";
     }
 
-    // ----------------------------------------------------------------------
-    // 5. ACTUALIZAR (Persistencia Update)
-    // ----------------------------------------------------------------------
+    // 5. ACTUALIZAR
     @PostMapping("/update")
     public String update(@Validated Sala sala, BindingResult bindingResult, Model model, RedirectAttributes ra) throws IOException {
 
         // A. Validación de Duplicados
         Sala salaExistente = salaRepository.findByNombresIgnoreCase(sala.getNombres());
 
-        // Corregido: Solo verificamos el ID si encontramos una sala con ese nombre
         if (salaExistente != null) {
-            // Si el ID de la sala encontrada es DIFERENTE al que estamos editando,
-            // significa que el nombre pertenece a OTRA sala -> Error.
             if (!sala.getId().equals(salaExistente.getId())) {
-                bindingResult.rejectValue("nombres", "NombreDuplicado", "Ya existe otra sala con ese nombre.");
+                bindingResult.rejectValue("nombres", "NombreDuplicado");
             }
         }
 
@@ -137,9 +122,7 @@ public class SalaController {
         return "redirect:/salas";
     }
 
-    // ----------------------------------------------------------------------
     // 6. ELIMINAR (Delete)
-    // ----------------------------------------------------------------------
     @PostMapping("/delete/{id}")
     public String delete(@PathVariable Integer id, RedirectAttributes ra){
 

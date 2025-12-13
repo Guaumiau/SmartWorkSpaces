@@ -1,7 +1,5 @@
 package pe.isil.smartworkspaces.controller;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -18,7 +16,6 @@ import pe.isil.smartworkspaces.model.Sala;
 import pe.isil.smartworkspaces.repository.ReservaRepository;
 import pe.isil.smartworkspaces.repository.SalaRepository;
 
-import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
@@ -27,8 +24,6 @@ import java.util.Optional;
 @Controller
 @RequestMapping("/reservas")
 public class ReservaController {
-
-    private final Logger LOGGER = LoggerFactory.getLogger(ReservaController.class);
 
     @Autowired
     private ReservaRepository reservaRepository;
@@ -76,18 +71,18 @@ public class ReservaController {
         if (reserva.getFecha() != null && reserva.getHoraInicio() != null &&
                 reserva.getFecha().isEqual(LocalDate.now()) &&
                 reserva.getHoraInicio().isBefore(LocalTime.now())) {
-            bindingResult.rejectValue("horaInicio", "HoraInvalida", "La hora de inicio no puede ser en el pasado.");
+            bindingResult.rejectValue("horaInicio", "HoraInvalida");
         }
         if (reserva.getHoraInicio() != null && reserva.getHoraFin() != null &&
                 !reserva.getHoraFin().isAfter(reserva.getHoraInicio())) {
-            bindingResult.rejectValue("horaFin", "HoraInvalida", "La hora final debe ser posterior a la inicial.");
+            bindingResult.rejectValue("horaFin", "HoraInvalida");
         }
 
         if (idSala != null) {
             Sala salaSeleccionada = salaRepository.findById(idSala).orElse(null);
             if (salaSeleccionada != null) {
                 if (salaSeleccionada.getEstado() == Estado.INACTIVA) {
-                    bindingResult.rejectValue("sala", "SalaInactiva", "No se puede reservar una sala inactiva.");
+                    bindingResult.rejectValue("sala", "SalaInactiva");
                 } else {
                     reserva.setSala(salaSeleccionada);
                 }
@@ -134,17 +129,17 @@ public class ReservaController {
         if (reserva.getFecha() != null && reserva.getHoraInicio() != null &&
                 reserva.getFecha().isEqual(LocalDate.now()) &&
                 reserva.getHoraInicio().isBefore(LocalTime.now())) {
-            bindingResult.rejectValue("horaInicio", "HoraInvalida", "La hora de inicio no puede ser en el pasado.");
+            bindingResult.rejectValue("horaInicio", "HoraInvalida");
         }
         if (reserva.getHoraInicio() != null && reserva.getHoraFin() != null &&
                 !reserva.getHoraFin().isAfter(reserva.getHoraInicio())) {
-            bindingResult.rejectValue("horaFin", "HoraInvalida", "La hora final debe ser posterior a la inicial.");
+            bindingResult.rejectValue("horaFin", "HoraInvalida");
         }
         if (idSala != null) {
             Sala salaSeleccionada = salaRepository.findById(idSala).orElse(null);
             if (salaSeleccionada != null) {
                 if (salaSeleccionada.getEstado() == Estado.INACTIVA) {
-                    bindingResult.rejectValue("sala", "SalaInactiva", "No se puede reservar una sala inactiva.");
+                    bindingResult.rejectValue("sala", "SalaInactiva");
                 } else {
                     reserva.setSala(salaSeleccionada);
                 }
