@@ -89,6 +89,17 @@ public class ReservaController {
             }
         }
 
+        boolean hayCruce = reservaRepository.existeCruceDeHorarios(
+                reserva.getSala(),
+                reserva.getFecha(),
+                reserva.getHoraInicio(),
+                reserva.getHoraFin()
+        );
+
+        if (hayCruce) {
+            bindingResult.rejectValue("horaInicio", "ReservaOcupada");
+        }
+
         if (bindingResult.hasErrors()) {
             model.addAttribute("reserva", reserva);
             model.addAttribute("salas", salaRepository.findAll());
@@ -144,6 +155,17 @@ public class ReservaController {
                     reserva.setSala(salaSeleccionada);
                 }
             }
+        }
+
+        boolean hayCruce = reservaRepository.existeCruceDeHorarios(
+                reserva.getSala(),
+                reserva.getFecha(),
+                reserva.getHoraInicio(),
+                reserva.getHoraFin()
+        );
+
+        if (hayCruce) {
+            bindingResult.rejectValue("horaInicio", "ReservaOcupada");
         }
 
         if(bindingResult.hasErrors()){
